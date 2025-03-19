@@ -1,0 +1,39 @@
+A = 9 #(Reservoir area, [km^2])
+h = 800 #(Reservoir thickness, [m])
+v = 6 #(Volume, [km^3])
+Tr = 175 #(Reservoir temperature, [km^3])
+Ta = 70 #(Abandon temperature, [°C])
+Phi = 0.2 #(Porosity, [°C])
+Cr = 0.91 #(Rock specific heat, [kJ/kj*°C])
+Cw = 4.2 #(Water specific heat, [kJ/kj*°C])
+rho_r = 2250 #(Rock density, [kg/m^3])
+rho_w = 968.955 #(Water density, [kg/m^3])
+Sw = 0.95 #(Water saturation, [%])
+Rf = 0.175 #(Recovery factor, [%])
+Ce = 0.175 #(Coversion efficency, [%])
+Pf = 0.95 #(Power factor, [%])
+t = 25 #(Lifespan, (years))
+
+def total_thermal_energy(A, h, rho_r, Cr, rho_w, Cw, Sw, Phi, Tr, Ta):
+    """
+    Computes Q_T (kJ).
+    """
+    Q_r = A * h * rho_r * Cr * (1-Phi) * (Tr-Ta)
+    Q_w = A * h * rho_w * Cw * Phi * Sw * (Tr-Ta)
+    Q_T = Q_r + Q_w
+    return Q_T
+
+Q_T = total_thermal_energy(A, h, rho_r, Cr, rho_w, Cw, Sw, Phi, Tr, Ta)
+
+def power_plant_size(A, h, Tr, Ta, rho_r, Cr, Phi, rho_w, Cw, Sw, Rf, Ce, Pf, t):
+    """
+    Computes electrical capacity P from total thermal energy. [We]
+    """
+    P = (A* h * (Tr-Ta) * (rho_r * Cr * (1-Phi) + rho_w * Cw * Sw * Phi)) * ( Rf * Ce) / (Pf * t)
+    
+    return P
+
+P = power_plant_size(A, h, Tr, Ta, rho_r, Cr, Phi, rho_w, Cw, Sw, Rf, Ce, Pf, t)
+
+print(f'The available thermal energy in the reservoir is {Q_T} kJ')
+print(f'The reservoirs size is {P} We')
