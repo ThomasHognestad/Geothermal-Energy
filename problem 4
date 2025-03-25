@@ -13,6 +13,7 @@ Rf = 0.175 #(Recovery factor, [%])
 Ce = 0.175 #(Coversion efficency, [%])
 Pf = 0.95 #(Power factor, [%])
 t = 25 #(Lifespan, (years))
+seconds_per_year = 365.25 * 24 * 3600
 
 def total_thermal_energy(A, h, rho_r, Cr, rho_Co2, C_Co2, S_Co2, Phi, Tr, Ta):
     """
@@ -35,5 +36,17 @@ def power_plant_size(A, h, Tr, Ta, rho_r, Cr, Phi, rho_Co2, C_Co2, S_Co2, Rf, Ce
 
 P = power_plant_size(A, h, Tr, Ta, rho_r, Cr, Phi, rho_Co2, C_Co2, S_Co2, Rf, Ce, Pf, t)
 
+def thermal_power_output(Q_T, t):
+    """
+    Computes the average thermal power output over the lifespan of the project [Wth]
+    """
+    seconds_per_year = 365.25 * 24 * 3600
+    P_th = Q_T / (t * seconds_per_year)
+    return P_th
+
+P_th = thermal_power_output(Q_T, t)
+
+
 print(f'The available thermal energy in the reservoir considering Co2 is the working fluid is {Q_T} kJ')
 print(f'The reservoirs size considering Co2 as the working fluid is {P} We')
+print(f'The reservoirs total thermal power output with CO2 is {P_th} kW_th')
