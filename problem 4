@@ -40,7 +40,6 @@ def thermal_power_output(Q_T, t):
     """
     Computes the average thermal power output over the lifespan of the project [Wth]
     """
-    seconds_per_year = 365.25 * 24 * 3600
     P_th = Q_T / (t * seconds_per_year)
     return P_th
 
