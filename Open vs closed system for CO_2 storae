@@ -1,0 +1,38 @@
+CO_2 Storage Capacity Estimation – Open vs. Closed System
+Author: Thomas Hognestad 267517
+"""
+
+A = 50e6         # Area [m^2]
+h_net = 150      # Net pay thickness [m]
+phi = 0.10       # Porosity [%]
+rho_CO2 = 686    # CO_2 density [kg/m^3]
+S_wirr = 0.20    # Irreducible water saturation [%]
+eff_open = 0.05  # Storage efficiency (open system) [%]
+
+# For closed system
+Cr = 8.5e-10     # Rock compressibility [Pa^-1]
+Cw = 3.5e-10       # Water compressibility [Pa^-1]
+deltaP = 1.4e7     # Pressure increase allowed [Pa]
+
+def co2_storage_open(A, h_net, phi, rho_CO2, S_wirr, eff):
+    """
+    Calculates CO_2 storage capacity for an open aquifer [kg].
+    """
+    V_trap = A * h_net
+    M_CO2 = V_trap * phi * (1 - S_wirr) * eff_open * rho_CO2
+    return M_CO2
+
+def co2_storage_closed(A, h, phi, rho_CO2, Cr, Cw, deltaP):
+    """
+    Calculates CO_2 storage capacity for a closed aquifer [kg].
+    """
+    V_trap = A * h_net    
+    M_CO2 = V_trap * phi * (Cr + Cw) * deltaP * rho_CO2
+    return M_CO2
+
+M_open = co2_storage_open(A, h_net, phi, rho_CO2, S_wirr, eff_open)
+M_closed = co2_storage_closed(A, h_net, phi, rho_CO2, Cr, Cw, deltaP)
+
+print(f"CO_2 storage capacity (open system): {M_open / 1e9:.2f} Mt")
+
+print(f"CO_2 storage capacity (closed system): {M_closed / 1e9:.2f} Mt")
